@@ -1,5 +1,12 @@
 import { SUPPORTED_SITES, extractHostname } from "./constants/site-configs.js";
 
+// Notify user on update (useful for non-host_permissions changes)
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "update") {
+    chrome.storage.local.set({ updatedFrom: details.previousVersion });
+  }
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   const url = tab.url;
   const hostname = extractHostname(url);
