@@ -300,6 +300,42 @@ const SITE_BEHAVIORS = {
       }
     },
   },
+
+  "www.genspark.ai": {
+    shouldHandle(event) {
+      return event.target.tagName === "TEXTAREA";
+    },
+    onEnter(event) {
+      event.stopPropagation();
+    },
+  },
+
+  "duck.ai": {
+    shouldHandle(event) {
+      return event.target.tagName === "TEXTAREA";
+    },
+    onEnter(event) {
+      event.stopPropagation();
+    },
+  },
+
+  "manus.im": {
+    shouldHandle(event) {
+      return event.target.tagName === "DIV" &&
+             event.target.classList.contains("ProseMirror") &&
+             event.target.contentEditable === "true";
+    },
+    onEnter(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      dispatchEnter(event.target, { shiftKey: true });
+    },
+    onCtrlEnter(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      dispatchEnter(event.target, {});
+    },
+  },
 };
 
 // ── Unified handler ──────────────────────────────────────────────────────────

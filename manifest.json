@@ -30,7 +30,10 @@
         "https://poe.com/*",
         "https://v0.app/*",
         "https://cursor.com/agents*",
-        "https://cursor.com/*/agents*"
+        "https://cursor.com/*/agents*",
+        "https://www.genspark.ai/*",
+        "https://duck.ai/*",
+        "https://manus.im/*"
       ],
       "js": [
         "content/ctrl-enter-utils.js",
@@ -59,7 +62,10 @@
     "https://grok.com/*",
     "https://copilot.microsoft.com/*",
     "https://m365.cloud.microsoft/*",
-    "https://cursor.com/*"
+    "https://cursor.com/*",
+    "https://www.genspark.ai/*",
+    "https://duck.ai/*",
+    "https://manus.im/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",

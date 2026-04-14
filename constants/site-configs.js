@@ -22,6 +22,9 @@ export const SITE_CONFIGS = [
   { hostname: "poe.com", matchPatterns: ["https://poe.com/*"] },
   { hostname: "v0.app", matchPatterns: ["https://v0.app/*"] },
   { hostname: "cursor.com", matchPatterns: ["https://cursor.com/agents*", "https://cursor.com/*/agents*"] },
+  { hostname: "www.genspark.ai", matchPatterns: ["https://www.genspark.ai/*"] },
+  { hostname: "duck.ai", matchPatterns: ["https://duck.ai/*"] },
+  { hostname: "manus.im", matchPatterns: ["https://manus.im/*"] },
 ];
 
 export const SUPPORTED_SITES = SITE_CONFIGS.map((c) => c.hostname);

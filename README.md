@@ -39,6 +39,9 @@ You can use this extension on the following pages:
 * <https://poe.com>
 * <https://v0.app>
 * <https://cursor.com/agents>
+* <https://www.genspark.ai>
+* <https://duck.ai>
+* <https://manus.im>
 
 ## Demo Video
 

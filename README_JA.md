@@ -39,6 +39,9 @@
 * <https://poe.com>
 * <https://v0.app>
 * <https://cursor.com/agents>
+* <https://www.genspark.ai>
+* <https://duck.ai>
+* <https://manus.im>
 
 ## デモ動画
 
