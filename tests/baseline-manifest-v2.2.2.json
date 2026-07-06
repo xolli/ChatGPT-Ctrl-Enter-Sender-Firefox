@@ -6,10 +6,7 @@
   "default_locale": "en",
   "author": "Kamada Masachika",
   "permissions": [
-    "storage",
-    "scripting",
-    "activeTab",
-    "declarativeContent"
+    "storage"
   ],
   "background": {
     "service_worker": "background.js",
@@ -63,11 +60,6 @@
     "https://copilot.microsoft.com/*",
     "https://m365.cloud.microsoft/*",
     "https://cursor.com/*"
-  ],
-  "optional_host_permissions": [
-    "https://www.genspark.ai/*",
-    "https://duck.ai/*",
-    "https://manus.im/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",

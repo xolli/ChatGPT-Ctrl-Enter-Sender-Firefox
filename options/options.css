@@ -28,6 +28,23 @@ label {
   border-radius: 4px;
 }
 
+.grant-button {
+  font-size: 12px;
+  font-family: inherit;
+  margin-left: 8px;
+  padding: 2px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.grant-button:hover {
+  opacity: 0.85;
+}
+
 #saveButton {
   min-width: 100px;
   padding: 10px 20px;
@@ -74,6 +91,11 @@ label {
   }
 
   #saveButton {
+    background-color: #4BD865;
+    color: #202123;
+  }
+
+  .grant-button {
     background-color: #4BD865;
     color: #202123;
   }
