@@ -303,18 +303,29 @@ const SITE_BEHAVIORS = {
 
   "www.genspark.ai": {
     shouldHandle(event) {
-      return event.target.tagName === "TEXTAREA";
+      return event.target.tagName === "TEXTAREA" ||
+        (event.target.tagName === "DIV" && event.target.contentEditable === "true");
     },
     onEnter(event) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      insertTextareaNewline(event.target);
+      if (event.target.tagName === "TEXTAREA") {
+        insertTextareaNewline(event.target);
+      } else {
+        // Edit mode: contentEditable div — insert line break directly
+        document.execCommand("insertLineBreak");
+      }
     },
     onCtrlEnter(event) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      const button = document.querySelector(".enter-icon-wrapper");
-      if (button) button.click();
+      if (event.target.tagName === "TEXTAREA") {
+        const button = document.querySelector(".enter-icon-wrapper");
+        if (button) button.click();
+      } else {
+        // Edit mode: dispatch plain Enter to save
+        dispatchEnter(event.target, {});
+      }
     },
   },
 
@@ -331,7 +342,13 @@ const SITE_BEHAVIORS = {
       event.preventDefault();
       event.stopImmediatePropagation();
       const button = findFormButton(event.target, 'button[type="submit"]:not([disabled])');
-      if (button) button.click();
+      if (button) {
+        button.click();
+      } else {
+        // Edit mode: no form/submit button; dispatch plain Enter for duck.ai to handle
+        // (isTrusted will be false, so the extension won't re-intercept it)
+        dispatchEnter(event.target, {});
+      }
     },
   },
 

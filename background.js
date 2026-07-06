@@ -104,7 +104,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
   const hostname = extractHostname(url);
   if (!SUPPORTED_SITES.includes(hostname)) {
-    chrome.action.disable(tabId);
+    chrome.action.disable(tabId).catch(() => { });
     return;
   }
 
@@ -113,8 +113,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       const siteSettings = data.siteSettings || {};
       const isEnabled = siteSettings[hostname] ?? true;
 
-      chrome.action.setIcon({ tabId, path: isEnabled ? "icon/enabled.png" : "icon/disabled.png" });
-      chrome.action.enable(tabId);
+      chrome.action.setIcon({ tabId, path: isEnabled ? "icon/enabled.png" : "icon/disabled.png" }).catch(() => { });
+      chrome.action.enable(tabId).catch(() => { });
     });
   }
 });
