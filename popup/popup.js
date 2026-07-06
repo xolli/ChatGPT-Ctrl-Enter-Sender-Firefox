@@ -71,6 +71,6 @@ grantButton.addEventListener("click", () => {
 });
 
 function updateIcon(enabled, tabId) {
-  chrome.action.setIcon({ tabId, path: enabled ? "icon/enabled.png" : "icon/disabled.png" });
+  chrome.action.setIcon({ tabId, path: enabled ? "/icon/enabled.png" : "/icon/disabled.png" });
   chrome.action.enable(tabId);
 }

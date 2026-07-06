@@ -42,11 +42,12 @@ async function ensureActionRules() {
 // Optional sites are not in manifest content_scripts; their scripts are
 // registered here once the user grants the host permission (see popup).
 
-let _syncing = false;
-async function syncOptionalContentScripts() {
-  if (_syncing) return;
-  _syncing = true;
-  try {
+let _syncQueue = Promise.resolve();
+function syncOptionalContentScripts() {
+  _syncQueue = _syncQueue.then(_doSyncOptionalContentScripts, _doSyncOptionalContentScripts);
+  return _syncQueue;
+}
+async function _doSyncOptionalContentScripts() {
   const registered = await chrome.scripting.getRegisteredContentScripts();
   const registeredIds = new Set(registered.map((script) => script.id));
 
@@ -64,9 +65,6 @@ async function syncOptionalContentScripts() {
     } else if (!granted && registeredIds.has(config.hostname)) {
       await chrome.scripting.unregisterContentScripts({ ids: [config.hostname] });
     }
-  }
-  } finally {
-    _syncing = false;
   }
 }
 

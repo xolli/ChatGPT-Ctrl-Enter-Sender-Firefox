@@ -31,7 +31,7 @@ sites are added as **opt-in** sites:
   or static `content_scripts`).
 - They are marked `optional: true` in `constants/site-configs.js`.
 - Users enable them once per site via the popup ("Enable on this site").
-- `tests/permission-warnings.spec.js` enforces in CI that no change introduces
+- `tests/permission-warnings.spec.js` should be run locally before release to verify that no change introduces
   a new permission warning.
 
 See the checklist in `constants/site-configs.js` for the exact steps.
