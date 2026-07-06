@@ -50,7 +50,11 @@
 如果您遇到任何问题，我们建议您暂时禁用这些扩展，看看问题是否得到解决。
 
 * [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
+
+### Microsoft Edge 的限制
+
+已确认在 Microsoft Edge 中，本扩展在 `copilot.microsoft.com` 和 `m365.cloud.microsoft` 等 Microsoft 域名上无法正常工作（截至2026年7月）。<br>
+如遇到此问题，请尝试使用 Chrome 或其他基于 Chromium 的浏览器。
 
 ## 贡献者
 

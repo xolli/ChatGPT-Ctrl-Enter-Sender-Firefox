@@ -50,7 +50,11 @@
 問題が発生した場合は、一時的にこれらの拡張機能を無効化し、問題が解消するかご確認ください。
 
 * [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
+
+### Microsoft Edge での制限について
+
+Microsoft Edge では、`copilot.microsoft.com` や `m365.cloud.microsoft` などの Microsoft ドメインで拡張機能が動作しないことが確認されています (2026年7月時点)。<br>
+これらのサイトで本拡張機能を利用する場合は、Chrome などの他の Chromium ベースのブラウザをお試しください。
 
 ## コントリビューター
 

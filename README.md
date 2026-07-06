@@ -50,7 +50,11 @@ We've noticed that when the following extensions are used concurrently, this ext
 If you encounter any issues, we recommend disabling these extensions temporarily to see if the problem is resolved.
 
 * [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
+
+### Microsoft Edge Limitation
+
+This extension has been confirmed not to work on Microsoft domains such as `copilot.microsoft.com` and `m365.cloud.microsoft` when using Microsoft Edge (as of July 2026).<br>
+If you experience this issue, please try using Chrome or another Chromium-based browser.
 
 ## Contributors
 

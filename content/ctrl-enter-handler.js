@@ -132,6 +132,7 @@ const SITE_BEHAVIORS = {
              event.target.id === "m365-chat-editor-target-element";
     },
     onEnter(event) {
+      event.preventDefault();
       event.stopImmediatePropagation();
       dispatchEnter(event.target, { shiftKey: true });
     },
