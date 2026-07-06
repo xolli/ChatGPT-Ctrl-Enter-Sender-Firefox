@@ -38,7 +38,12 @@ You can use this extension on the following pages:
 * <https://github.com> (Copilot, Spark)
 * <https://poe.com>
 * <https://v0.app>
-* <https://cursor.com/agents>
+* <https://cursor.com/agents> (opt-in)
+* <https://www.genspark.ai> (opt-in)
+* <https://duck.ai> (opt-in)
+* <https://manus.im> (opt-in)
+
+*Opt-in sites: to keep updates from requiring new permissions for everyone, these sites are enabled per user. Open the site, click the extension icon, and press "Enable on this site" once.*
 
 ## Demo Video
 
@@ -50,7 +55,11 @@ We've noticed that when the following extensions are used concurrently, this ext
 If you encounter any issues, we recommend disabling these extensions temporarily to see if the problem is resolved.
 
 * [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
+
+### Microsoft Edge Limitation
+
+This extension has been confirmed not to work on Microsoft domains such as `copilot.microsoft.com` and `m365.cloud.microsoft` when using Microsoft Edge (as of July 2026).<br>
+If you experience this issue, please try using Chrome or another Chromium-based browser.
 
 ## Contributors
 
