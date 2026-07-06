@@ -38,10 +38,12 @@ You can use this extension on the following pages:
 * <https://github.com> (Copilot, Spark)
 * <https://poe.com>
 * <https://v0.app>
-* <https://cursor.com/agents>
-* <https://www.genspark.ai>
-* <https://duck.ai>
-* <https://manus.im>
+* <https://cursor.com/agents> (opt-in)
+* <https://www.genspark.ai> (opt-in)
+* <https://duck.ai> (opt-in)
+* <https://manus.im> (opt-in)
+
+*Opt-in sites: to keep updates from requiring new permissions for everyone, these sites are enabled per user. Open the site, click the extension icon, and press "Enable on this site" once.*
 
 ## Demo Video
 

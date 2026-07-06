@@ -72,7 +72,7 @@ const SITE_BEHAVIORS = {
   "claude.ai": {
     shouldHandle(event) {
       return (event.target.tagName === "DIV" && event.target.contentEditable === "true") ||
-             event.target.tagName === "TEXTAREA";
+        event.target.tagName === "TEXTAREA";
     },
     onEnter(event) {
       event.preventDefault();
@@ -129,7 +129,7 @@ const SITE_BEHAVIORS = {
     shouldHandle(event) {
       const url = window.location.href;
       return url.startsWith("https://m365.cloud.microsoft/chat") &&
-             event.target.id === "m365-chat-editor-target-element";
+        event.target.id === "m365-chat-editor-target-element";
     },
     onEnter(event) {
       event.preventDefault();
@@ -161,7 +161,7 @@ const SITE_BEHAVIORS = {
   "grok.com": {
     shouldHandle(event) {
       return event.target.tagName === "TEXTAREA" ||
-             (event.target.tagName === "DIV" && event.target.contentEditable === "true");
+        (event.target.tagName === "DIV" && event.target.contentEditable === "true");
     },
     onEnter(event) {
       event.stopImmediatePropagation();
@@ -192,9 +192,9 @@ const SITE_BEHAVIORS = {
   "chat.mistral.ai": {
     shouldHandle(event) {
       return (event.target.tagName === "DIV" &&
-              event.target.classList.contains("ProseMirror") &&
-              event.target.contentEditable === "true") ||
-             event.target.tagName === "TEXTAREA";
+        event.target.classList.contains("ProseMirror") &&
+        event.target.contentEditable === "true") ||
+        event.target.tagName === "TEXTAREA";
     },
     onEnter(event) {
       event.preventDefault();
@@ -228,7 +228,7 @@ const SITE_BEHAVIORS = {
     shouldHandle(event) {
       const url = window.location.href;
       return (url.startsWith("https://github.com/copilot") || url.startsWith("https://github.com/spark")) &&
-             event.target.tagName === "TEXTAREA";
+        event.target.tagName === "TEXTAREA";
     },
     onEnter(event) {
       event.stopImmediatePropagation();
@@ -254,9 +254,9 @@ const SITE_BEHAVIORS = {
   "v0.app": {
     shouldHandle(event) {
       return event.target.tagName === "TEXTAREA" ||
-             (event.target.tagName === "DIV" &&
-              event.target.classList.contains("ProseMirror") &&
-              event.target.contentEditable === "true");
+        (event.target.tagName === "DIV" &&
+          event.target.classList.contains("ProseMirror") &&
+          event.target.contentEditable === "true");
     },
     onEnter(event) {
       if (event.target.tagName === "TEXTAREA") {
@@ -281,10 +281,10 @@ const SITE_BEHAVIORS = {
     shouldHandle(event) {
       const url = window.location.href;
       return isCursorAgentsPath(url) &&
-             event.target.tagName === "DIV" &&
-             event.target.contentEditable === "true" &&
-             event.target.getAttribute("data-lexical-editor") === "true" &&
-             event.target.getAttribute("role") === "textbox";
+        event.target.tagName === "DIV" &&
+        event.target.contentEditable === "true" &&
+        event.target.getAttribute("data-lexical-editor") === "true" &&
+        event.target.getAttribute("role") === "textbox";
     },
     onEnter(event) {
       event.preventDefault();
@@ -306,7 +306,15 @@ const SITE_BEHAVIORS = {
       return event.target.tagName === "TEXTAREA";
     },
     onEnter(event) {
-      event.stopPropagation();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      insertTextareaNewline(event.target);
+    },
+    onCtrlEnter(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const button = document.querySelector(".enter-icon-wrapper");
+      if (button) button.click();
     },
   },
 
@@ -315,15 +323,23 @@ const SITE_BEHAVIORS = {
       return event.target.tagName === "TEXTAREA";
     },
     onEnter(event) {
-      event.stopPropagation();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      insertTextareaNewline(event.target);
+    },
+    onCtrlEnter(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const button = findFormButton(event.target, 'button[type="submit"]:not([disabled])');
+      if (button) button.click();
     },
   },
 
   "manus.im": {
     shouldHandle(event) {
       return event.target.tagName === "DIV" &&
-             event.target.classList.contains("ProseMirror") &&
-             event.target.contentEditable === "true";
+        event.target.classList.contains("ProseMirror") &&
+        event.target.contentEditable === "true";
     },
     onEnter(event) {
       event.preventDefault();

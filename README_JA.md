@@ -38,10 +38,12 @@
 * <https://github.com> (Copilot, Spark)
 * <https://poe.com>
 * <https://v0.app>
-* <https://cursor.com/agents>
-* <https://www.genspark.ai>
-* <https://duck.ai>
-* <https://manus.im>
+* <https://cursor.com/agents> (opt-in)
+* <https://www.genspark.ai> (opt-in)
+* <https://duck.ai> (opt-in)
+* <https://manus.im> (opt-in)
+
+*オプトイン サイト: 全ユーザーへの権限再承認を避けるため、これらのサイトはユーザーごとに有効化する方式です。サイトを開いて拡張機能のアイコンをクリックし、「Enable on this site」を一度押してください。*
 
 ## デモ動画
 

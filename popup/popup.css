@@ -6,6 +6,36 @@ body {
   color: #DADADA;
 }
 
+[hidden] {
+  display: none !important;
+}
+
+.grant-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.grant-btn {
+  font-size: 13px;
+  font-family: inherit;
+  color: #202123;
+  background-color: #4BD865;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease;
+}
+
+.grant-btn:hover {
+  opacity: 0.85;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;

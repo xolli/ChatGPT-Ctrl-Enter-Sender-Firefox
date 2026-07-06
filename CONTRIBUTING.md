@@ -21,6 +21,21 @@ These sites are supported but maintained on a best-effort basis:
 These sites may be removed if they become unmaintainable:
 - Poe, v0, Cursor, Genspark, duck.ai, Manus
 
+## How New Sites Are Shipped (Opt-in)
+
+Adding a site to the manifest's required permissions disables the extension
+for every existing user until they re-approve it. To avoid this, all new
+sites are added as **opt-in** sites:
+
+- They are listed in `optional_host_permissions` (never in `host_permissions`
+  or static `content_scripts`).
+- They are marked `optional: true` in `constants/site-configs.js`.
+- Users enable them once per site via the popup ("Enable on this site").
+- `tests/permission-warnings.spec.js` enforces in CI that no change introduces
+  a new permission warning.
+
+See the checklist in `constants/site-configs.js` for the exact steps.
+
 ## New Site Requests
 
 We consider new site support under these criteria:

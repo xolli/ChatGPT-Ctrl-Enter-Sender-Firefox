@@ -38,10 +38,12 @@
 * <https://github.com> (Copilot, Spark)
 * <https://poe.com>
 * <https://v0.app>
-* <https://cursor.com/agents>
-* <https://www.genspark.ai>
-* <https://duck.ai>
-* <https://manus.im>
+* <https://cursor.com/agents> (opt-in)
+* <https://www.genspark.ai> (opt-in)
+* <https://duck.ai> (opt-in)
+* <https://manus.im> (opt-in)
+
+*可选站点: 为避免更新时要求所有用户重新授权，这些站点需按用户启用。打开站点，点击扩展图标，然后按一次 "Enable on this site"。*
 
 ## 演示视频
 
