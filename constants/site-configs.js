@@ -30,7 +30,7 @@ export const SITE_CONFIGS = [
   { hostname: "github.com", matchPatterns: ["https://github.com/copilot*", "https://github.com/spark*"] },
   { hostname: "poe.com", matchPatterns: ["https://poe.com/*"] },
   { hostname: "v0.app", matchPatterns: ["https://v0.app/*"] },
-  { hostname: "cursor.com", matchPatterns: ["https://cursor.com/agents*", "https://cursor.com/*/agents*"] },
+  { hostname: "cursor.com", matchPatterns: ["https://cursor.com/agents*", "https://cursor.com/*/agents*"], optional: true },
   { hostname: "www.genspark.ai", matchPatterns: ["https://www.genspark.ai/*"], optional: true },
   { hostname: "duck.ai", matchPatterns: ["https://duck.ai/*"], optional: true },
   { hostname: "manus.im", matchPatterns: ["https://manus.im/*"], optional: true },

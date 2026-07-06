@@ -38,7 +38,7 @@
 * <https://github.com> (Copilot, Spark)
 * <https://poe.com>
 * <https://v0.app>
-* <https://cursor.com/agents>
+* <https://cursor.com/agents> (opt-in)
 * <https://www.genspark.ai> (opt-in)
 * <https://duck.ai> (opt-in)
 * <https://manus.im> (opt-in)
