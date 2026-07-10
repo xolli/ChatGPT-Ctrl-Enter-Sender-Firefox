@@ -10,7 +10,7 @@ English | [日本語](README_JA.md) | [简体中文](README_CH.md)
 ## Browser Support
 
 ### Chromium-based Browsers (e.g. Chrome, Edge, Brave, etc.)
-[Available on Chrome Web Store](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
+[Chat AI Ctrl+Enter Sender - Chrome Web Store](https://chromewebstore.google.com/detail/chat-ai-ctrl+enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
 
 ### Firefox
 [Firefox Add-on page](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/tree/firefox)
