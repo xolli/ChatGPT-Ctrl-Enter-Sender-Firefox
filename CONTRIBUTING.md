@@ -65,6 +65,25 @@ Bug reports for Tier 1 and Tier 2 sites are always welcome. Please use the issue
 - Test your changes on the affected site(s).
 - Link related issues in the PR description.
 
+## Testing
+
+Run `npm test` before opening a pull request. This command runs the deterministic
+unit and extension integration suites and does not connect to supported AI sites.
+
+Tests under `tests/live/` connect to real sites and are intentionally excluded
+from the default suite. Run them only from a dedicated test environment:
+
+```shell
+npm run login
+npm run test:live
+```
+
+The live suite reuses the ignored `test-user-data/` profile. Use dedicated test
+accounts for that profile; do not copy cookies or a personal browser profile into
+the repository test environment. Live-site failures are diagnostic and are not a
+release gate because authentication, bot detection, and site DOM changes are
+outside this extension's control.
+
 ## Firefox
 
 **Firefox support has been discontinued.** The maintainer does not use Firefox and the Firefox extension platform has significant differences (MV3 migration, etc.), making continued maintenance difficult. The Firefox branch contains the last available version.
