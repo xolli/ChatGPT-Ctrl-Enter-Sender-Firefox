@@ -8,13 +8,13 @@ const handlerScriptPath = path.join(__dirname, "..", "content", "ctrl-enter-hand
 const handlerScript = fs.readFileSync(handlerScriptPath, "utf8");
 const submitSelector = 'button[type="submit"]:not([disabled])';
 
-function loadHandler(url, sendButton) {
+function loadHandler(url, sendButton, documentButtonSelector = submitSelector) {
   const parsedUrl = new URL(url);
   const context = {
     window: { location: { href: url, hostname: parsedUrl.hostname } },
     URL,
     document: {
-      querySelector: (selector) => (selector === submitSelector ? sendButton : null)
+      querySelector: (selector) => (selector === documentButtonSelector ? sendButton : null)
     },
     chrome: {
       storage: {
@@ -55,6 +55,28 @@ function createLexicalTarget({ formSendButton = null, attributes = {} } = {}) {
     tagName: "DIV",
     contentEditable: "true",
     getAttribute: (name) => mergedAttributes[name] ?? null,
+    dispatchEvent: (event) => {
+      dispatchedEvents.push(event);
+      return true;
+    },
+    closest: (selector) => {
+      if (selector !== "form" || !formSendButton) return null;
+      return {
+        querySelector: (query) => (query === submitSelector ? formSendButton : null)
+      };
+    }
+  };
+
+  return { target, dispatchedEvents };
+}
+
+function createTextareaTarget({ value = "text", formSendButton = null } = {}) {
+  const dispatchedEvents = [];
+  const target = {
+    tagName: "TEXTAREA",
+    value,
+    selectionStart: value.length,
+    selectionEnd: value.length,
     dispatchEvent: (event) => {
       dispatchedEvents.push(event);
       return true;
@@ -181,6 +203,106 @@ test("Cursor Agents の Meta+Enter は form 内送信ボタンをクリックす
   assert.equal(event.stopImmediatePropagationCount, 1);
   assert.equal(dispatchedEvents.length, 0);
   assert.equal(formSendButton.clickCount, 1);
+});
+
+// ── Other optional-site tests ───────────────────────────────────────────────
+
+test("Genspark の TEXTAREA で Enter はカーソル位置に改行を挿入する", () => {
+  const context = loadHandler("https://www.genspark.ai/", createButton());
+  const { target, dispatchedEvents } = createTextareaTarget({ value: "ab" });
+  target.selectionStart = target.selectionEnd = 1;
+  const event = createKeydownEvent(target);
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(target.value, "a\nb");
+  assert.equal(target.selectionStart, 2);
+  assert.equal(dispatchedEvents.length, 1);
+  assert.equal(dispatchedEvents[0].type, "input");
+  assert.equal(event.preventDefaultCount, 1);
+  assert.equal(event.stopImmediatePropagationCount, 1);
+});
+
+test("Genspark の TEXTAREA で Ctrl+Enter は送信ボタンを一度クリックする", () => {
+  const sendButton = createButton();
+  const context = loadHandler("https://www.genspark.ai/", sendButton, ".enter-icon-wrapper");
+  const { target } = createTextareaTarget();
+  const event = createKeydownEvent(target, { ctrlKey: true });
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(sendButton.clickCount, 1);
+  assert.equal(event.preventDefaultCount, 1);
+  assert.equal(event.stopImmediatePropagationCount, 1);
+});
+
+test("duck.ai の TEXTAREA で Enter はカーソル位置に改行を挿入する", () => {
+  const context = loadHandler("https://duck.ai/", createButton());
+  const { target, dispatchedEvents } = createTextareaTarget({ value: "ab" });
+  target.selectionStart = target.selectionEnd = 1;
+  const event = createKeydownEvent(target);
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(target.value, "a\nb");
+  assert.equal(target.selectionStart, 2);
+  assert.equal(dispatchedEvents.length, 1);
+  assert.equal(dispatchedEvents[0].type, "input");
+});
+
+test("duck.ai の TEXTAREA で Ctrl+Enter は form 内送信ボタンを一度クリックする", () => {
+  const sendButton = createButton();
+  const context = loadHandler("https://duck.ai/", createButton());
+  const { target } = createTextareaTarget({ formSendButton: sendButton });
+  const event = createKeydownEvent(target, { ctrlKey: true });
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(sendButton.clickCount, 1);
+  assert.equal(event.preventDefaultCount, 1);
+  assert.equal(event.stopImmediatePropagationCount, 1);
+});
+
+test("Manus の Enter は Shift+Enter にマッピングする", () => {
+  const dispatchedEvents = [];
+  const target = {
+    tagName: "DIV",
+    contentEditable: "true",
+    classList: { contains: (name) => name === "ProseMirror" },
+    dispatchEvent: (event) => {
+      dispatchedEvents.push(event);
+      return true;
+    }
+  };
+  const context = loadHandler("https://manus.im/", createButton());
+  const event = createKeydownEvent(target);
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(dispatchedEvents.length, 1);
+  assert.equal(dispatchedEvents[0].shiftKey, true);
+  assert.equal(event.preventDefaultCount, 1);
+});
+
+test("Manus の Ctrl+Enter は通常 Enter にマッピングする", () => {
+  const dispatchedEvents = [];
+  const target = {
+    tagName: "DIV",
+    contentEditable: "true",
+    classList: { contains: (name) => name === "ProseMirror" },
+    dispatchEvent: (event) => {
+      dispatchedEvents.push(event);
+      return true;
+    }
+  };
+  const context = loadHandler("https://manus.im/", createButton());
+  const event = createKeydownEvent(target, { ctrlKey: true });
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(dispatchedEvents.length, 1);
+  assert.equal(dispatchedEvents[0].shiftKey, undefined);
+  assert.equal(event.preventDefaultCount, 1);
 });
 
 // ── General behavior tests ───────────────────────────────────────────────────
