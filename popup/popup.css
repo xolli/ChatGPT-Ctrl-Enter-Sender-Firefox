@@ -109,6 +109,13 @@ body {
   line-height: 1.4;
 }
 
+.status-message {
+  color: #ff9b9b;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+
 .settings-link {
   font-size: 13px;
   color: #999;

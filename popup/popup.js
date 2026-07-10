@@ -5,6 +5,7 @@ const grantSection = document.querySelector("#grantSection");
 const unsupportedSection = document.querySelector("#unsupportedSection");
 const toggleButton = document.querySelector("#isEnabled");
 const grantButton = document.querySelector("#grantButton");
+const statusMessage = document.querySelector("#statusMessage");
 
 let currentTab = null;
 let currentConfig = null;
@@ -48,13 +49,21 @@ function showToggle() {
 
 toggleButton.addEventListener("change", () => {
   const isEnabled = toggleButton.checked;
+  toggleButton.disabled = true;
+  hideStatus();
 
-  chrome.storage.sync.get("siteSettings", (data) => {
-    const siteSettings = data.siteSettings || {};
-    siteSettings[currentConfig.hostname] = isEnabled;
-    chrome.storage.sync.set({ siteSettings }, () => {
+  chrome.runtime.sendMessage({
+    type: "update-site-settings",
+    updates: { [currentConfig.hostname]: isEnabled },
+  }, (response) => {
+    const failed = chrome.runtime.lastError || !response?.ok;
+    if (failed) {
+      toggleButton.checked = !isEnabled;
+      showStatus("Could not save this setting. Please try again.");
+    } else {
       updateIcon(isEnabled, currentTab.id);
-    });
+    }
+    toggleButton.disabled = false;
   });
 });
 
@@ -73,4 +82,14 @@ grantButton.addEventListener("click", () => {
 function updateIcon(enabled, tabId) {
   chrome.action.setIcon({ tabId, path: enabled ? "/icon/enabled.png" : "/icon/disabled.png" });
   chrome.action.enable(tabId);
+}
+
+function showStatus(message) {
+  statusMessage.textContent = message;
+  statusMessage.hidden = false;
+}
+
+function hideStatus() {
+  statusMessage.hidden = true;
+  statusMessage.textContent = "";
 }

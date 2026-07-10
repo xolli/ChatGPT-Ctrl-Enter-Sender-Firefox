@@ -68,6 +68,31 @@ async function _doSyncOptionalContentScripts() {
   }
 }
 
+// ── Serialized site-setting updates ─────────────────────────────────────────
+
+let _settingsQueue = Promise.resolve();
+function updateSiteSettings(updates) {
+  const applyUpdates = async () => {
+    const { siteSettings = {} } = await chrome.storage.sync.get("siteSettings");
+    await chrome.storage.sync.set({ siteSettings: { ...siteSettings, ...updates } });
+  };
+  _settingsQueue = _settingsQueue.then(applyUpdates, applyUpdates);
+  return _settingsQueue;
+}
+
+function validateSiteSettingUpdates(updates) {
+  if (!updates || typeof updates !== "object" || Array.isArray(updates)) return null;
+
+  const entries = Object.entries(updates);
+  if (entries.length === 0) return null;
+  if (entries.some(([hostname, enabled]) =>
+    !SUPPORTED_SITES.includes(hostname) || typeof enabled !== "boolean")) {
+    return null;
+  }
+
+  return Object.fromEntries(entries);
+}
+
 // Both operations are idempotent, so run them on every service worker start
 // rather than relying on onInstalled/onStartup (which don't cover all the
 // ways rules and registrations can get out of sync, e.g. unpacked loads).
@@ -88,8 +113,24 @@ chrome.permissions.onRemoved.addListener(() => syncOptionalContentScripts());
 
 // Lets the popup/options page wait for registration before reloading the tab.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (sender.id !== chrome.runtime.id) return;
+
   if (message?.type === "sync-optional-sites") {
     syncOptionalContentScripts().then(() => sendResponse(true));
+    return true;
+  }
+
+  if (message?.type === "update-site-settings") {
+    const updates = validateSiteSettingUpdates(message.updates);
+    if (!updates) {
+      sendResponse({ ok: false, error: "Invalid site setting update" });
+      return;
+    }
+
+    updateSiteSettings(updates).then(
+      () => sendResponse({ ok: true }),
+      (error) => sendResponse({ ok: false, error: String(error) })
+    );
     return true;
   }
 });
