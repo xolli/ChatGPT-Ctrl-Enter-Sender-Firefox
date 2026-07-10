@@ -3,6 +3,7 @@
 const { test: base, chromium } = require("@playwright/test");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 
 const EXTENSION_PATH = path.resolve(__dirname, "..");
 
@@ -13,10 +14,7 @@ const EXTENSION_PATH = path.resolve(__dirname, "..");
 const test = base.extend({
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
-    const userDataDir = path.join(__dirname, "..", "test-user-data");
-    if (!fs.existsSync(userDataDir)) {
-      fs.mkdirSync(userDataDir, { recursive: true });
-    }
+    const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "ctrl-enter-test-"));
 
     const context = await chromium.launchPersistentContext(userDataDir, {
       headless: false, // Extensions require headed mode
@@ -32,32 +30,12 @@ const test = base.extend({
       viewport: { width: 1280, height: 720 },
     });
 
-    // Remove navigator.webdriver flag
-    for (const page of context.pages()) {
-      await page.addInitScript(() => {
-        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-      });
+    try {
+      await use(context);
+    } finally {
+      await context.close();
+      fs.rmSync(userDataDir, { recursive: true, force: true });
     }
-    context.on("page", async (page) => {
-      await page.addInitScript(() => {
-        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-      });
-    });
-
-    // Load saved cookies from copy-chrome-session.js if available
-    const cookiesFile = path.join(__dirname, "..", "test-user-data", "cookies.json");
-    if (fs.existsSync(cookiesFile)) {
-      try {
-        const cookies = JSON.parse(fs.readFileSync(cookiesFile, "utf-8"));
-        await context.addCookies(cookies);
-        console.log(`  Loaded ${cookies.length} cookies from saved session`);
-      } catch (e) {
-        console.warn("  Warning: Could not load cookies:", e.message);
-      }
-    }
-
-    await use(context);
-    await context.close();
   },
 
   extensionId: async ({ context }, use) => {

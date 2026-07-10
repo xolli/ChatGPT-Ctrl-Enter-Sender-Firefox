@@ -6,12 +6,6 @@
  *     (this is what keeps the action icon clickable on ungranted sites)
  *   - no dynamic content scripts are registered while no optional host
  *     permission has been granted
- *
- * NOTE: a reused test-user-data profile can keep running a stale cached
- * service worker for the unpacked extension, which makes this spec fail
- * even though the code is correct. If that happens, delete test-user-data
- * (this loses saved login sessions) or reload the extension once via
- * chrome://extensions in that profile.
  */
 const { test } = require("./fixtures");
 const { expect } = require("@playwright/test");

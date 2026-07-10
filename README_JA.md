@@ -10,7 +10,7 @@
 ## 対応ブラウザ
 
 ### Chromium ベースのブラウザ (例: Chrome, Edge, Brave など)
-[Chrome ウェブストアで利用可能](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
+[Chat AI Ctrl+Enter Sender - Chrome ウェブストア](https://chromewebstore.google.com/detail/chat-ai-ctrl+enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
 
 ### Firefox
 [Firefox アドオンページ](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/tree/firefox)

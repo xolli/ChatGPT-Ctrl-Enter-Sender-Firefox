@@ -3,6 +3,7 @@ import { SITE_CONFIGS, SUPPORTED_SITES } from "../constants/site-configs.js";
 const siteList = document.getElementById("siteList");
 const selectAllCheckbox = document.getElementById("selectAll");
 const saveButton = document.getElementById("saveButton");
+const dirtySites = new Set();
 
 // Optional sites need a host permission granted by the user before their
 // content script can run; ungranted ones get an "Allow access" button instead
@@ -19,6 +20,7 @@ async function getUngrantedOptionalSites() {
 
 // Render checkbox list based on the SITE_CONFIGS array
 function renderCheckboxes(savedSettings, ungrantedSites) {
+  dirtySites.clear();
   siteList.innerHTML = '';
   SITE_CONFIGS.forEach((config) => {
     const hostname = config.hostname;
@@ -29,6 +31,7 @@ function renderCheckboxes(savedSettings, ungrantedSites) {
     checkbox.id = hostname;
     checkbox.checked = !needsGrant && (savedSettings[hostname] ?? true);
     checkbox.disabled = needsGrant;
+    checkbox.addEventListener("change", () => dirtySites.add(hostname));
 
     const label = document.createElement("label");
     label.className = "site-label";
@@ -56,17 +59,37 @@ function renderCheckboxes(savedSettings, ungrantedSites) {
 
 // Save settings to chrome.storage
 function saveSettings() {
-  const settings = {};
-  SUPPORTED_SITES.forEach((hostname) => {
+  const updates = {};
+  dirtySites.forEach((hostname) => {
     const checkbox = document.getElementById(hostname);
-    if (checkbox.disabled) return; // permission not granted; nothing to save
-    settings[hostname] = checkbox.checked;
+    if (!checkbox || checkbox.disabled) return;
+    updates[hostname] = checkbox.checked;
   });
 
-  chrome.storage.sync.set({ siteSettings: settings }, () => {
-    const originalText = saveButton.textContent;
+  const originalText = saveButton.textContent;
+  saveButton.disabled = true;
+
+  if (Object.keys(updates).length === 0) {
     saveButton.textContent = "Saved!";
-    saveButton.disabled = true;
+    setTimeout(() => {
+      saveButton.textContent = originalText;
+      saveButton.disabled = false;
+    }, 500);
+    return;
+  }
+
+  saveButton.textContent = "Saving...";
+  chrome.runtime.sendMessage({ type: "update-site-settings", updates }, (response) => {
+    const failed = chrome.runtime.lastError || !response?.ok;
+    saveButton.textContent = failed ? "Save failed" : "Saved!";
+
+    if (!failed) {
+      Object.entries(updates).forEach(([hostname, enabled]) => {
+        const checkbox = document.getElementById(hostname);
+        if (checkbox?.checked === enabled) dirtySites.delete(hostname);
+      });
+    }
+
     setTimeout(() => {
       saveButton.textContent = originalText;
       saveButton.disabled = false;
@@ -79,7 +102,10 @@ selectAllCheckbox.addEventListener("change", () => {
   const allChecked = selectAllCheckbox.checked;
   SUPPORTED_SITES.forEach((hostname) => {
     const checkbox = document.getElementById(hostname);
-    if (checkbox && !checkbox.disabled) checkbox.checked = allChecked;
+    if (checkbox && !checkbox.disabled) {
+      checkbox.checked = allChecked;
+      dirtySites.add(hostname);
+    }
   });
 });
 

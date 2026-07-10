@@ -10,7 +10,7 @@
 ## 浏览器支持
 
 ### 基于Chromium的浏览器 (例如：Chrome、Edge、Brave 等等)
-[在 Chrome 网上应用店中可用](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
+[Chat AI Ctrl+Enter Sender - Chrome 网上应用店](https://chromewebstore.google.com/detail/chat-ai-ctrl+enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
 
 ### Firefox
 [Firefox 扩展页面](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/tree/firefox)

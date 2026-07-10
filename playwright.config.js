@@ -4,7 +4,9 @@ const path = require("path");
 
 module.exports = defineConfig({
   testDir: "./tests",
+  testIgnore: "**/live/**",
   timeout: 60000,
+  workers: 1,
   retries: 0,
   reporter: [["html", { open: "never" }], ["list"]],
   use: {
