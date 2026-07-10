@@ -7,6 +7,7 @@ const vm = require("node:vm");
 const handlerScriptPath = path.join(__dirname, "..", "content", "ctrl-enter-handler.js");
 const handlerScript = fs.readFileSync(handlerScriptPath, "utf8");
 const submitSelector = 'button[type="submit"]:not([disabled])';
+const notebookSubmitSelector = 'query-box form button[type="submit"]';
 
 function loadHandler(url, sendButton, documentButtonSelector = submitSelector) {
   const parsedUrl = new URL(url);
@@ -303,6 +304,45 @@ test("Manus の Ctrl+Enter は通常 Enter にマッピングする", () => {
   assert.equal(dispatchedEvents.length, 1);
   assert.equal(dispatchedEvents[0].shiftKey, undefined);
   assert.equal(event.preventDefaultCount, 1);
+});
+
+// ── NotebookLM tests ────────────────────────────────────────────────────────
+
+test("NotebookLM の Ctrl+Enter は送信ボタンだけを一度クリックする", () => {
+  const sendButton = createButton();
+  const context = loadHandler(
+    "https://notebooklm.google.com/",
+    sendButton,
+    notebookSubmitSelector
+  );
+  const { target, dispatchedEvents } = createTextareaTarget();
+  target.classList = { contains: (name) => name === "query-box-input" };
+  const event = createKeydownEvent(target, { ctrlKey: true });
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(sendButton.clickCount, 1);
+  assert.equal(dispatchedEvents.length, 0);
+  assert.equal(event.preventDefaultCount, 1);
+  assert.equal(event.stopImmediatePropagationCount, 1);
+});
+
+test("NotebookLM の送信ボタンがない場合は通常 Enter にフォールバックする", () => {
+  const context = loadHandler(
+    "https://notebooklm.google.com/",
+    null,
+    notebookSubmitSelector
+  );
+  const { target, dispatchedEvents } = createTextareaTarget();
+  target.classList = { contains: (name) => name === "query-box-input" };
+  const event = createKeydownEvent(target, { ctrlKey: true });
+
+  context.handleCtrlEnter(event);
+
+  assert.equal(dispatchedEvents.length, 1);
+  assert.equal(dispatchedEvents[0].shiftKey, undefined);
+  assert.equal(event.preventDefaultCount, 1);
+  assert.equal(event.stopImmediatePropagationCount, 1);
 });
 
 // ── General behavior tests ───────────────────────────────────────────────────

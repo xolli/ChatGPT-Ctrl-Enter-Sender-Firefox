@@ -217,10 +217,14 @@ const SITE_BEHAVIORS = {
       dispatchEnter(event.target, { shiftKey: true });
     },
     onCtrlEnter(event) {
+      event.preventDefault();
       event.stopImmediatePropagation();
-      dispatchEnter(event.target, {});
       const submitButton = document.querySelector('query-box form button[type="submit"]');
-      if (submitButton) submitButton.click();
+      if (submitButton) {
+        submitButton.click();
+      } else {
+        dispatchEnter(event.target, {});
+      }
     },
   },
 
