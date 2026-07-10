@@ -15,7 +15,7 @@ const { expect } = require("@playwright/test");
 const fs = require("fs");
 const path = require("path");
 
-const BASELINE_MANIFEST = path.join(__dirname, "baseline-manifest-v2.2.2.json");
+const BASELINE_MANIFEST = path.join(__dirname, "baseline-manifest-v2.3.0.json");
 const CURRENT_MANIFEST = path.join(__dirname, "..", "manifest.json");
 
 function getPermissionWarnings(serviceWorker, manifestJson) {
@@ -43,7 +43,7 @@ test.describe("Permission Warnings", () => {
     const baselineWarnings = await getPermissionWarnings(serviceWorker, baseline);
     const currentWarnings = await getPermissionWarnings(serviceWorker, current);
 
-    console.log("  Baseline (v2.2.2) warnings:", baselineWarnings);
+    console.log("  Baseline (v2.3.0) warnings:", baselineWarnings);
     console.log("  Current manifest warnings:", currentWarnings);
 
     for (const warning of currentWarnings) {

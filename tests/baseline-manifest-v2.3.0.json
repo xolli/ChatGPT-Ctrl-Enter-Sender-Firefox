@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
   "author": "Kamada Masachika",
   "permissions": [
-    "storage"
+    "storage",
+    "scripting",
+    "activeTab",
+    "declarativeContent"
   ],
   "background": {
     "service_worker": "background.js",
@@ -28,9 +31,7 @@
         "https://github.com/copilot*",
         "https://github.com/spark*",
         "https://poe.com/*",
-        "https://v0.app/*",
-        "https://cursor.com/agents*",
-        "https://cursor.com/*/agents*"
+        "https://v0.app/*"
       ],
       "js": [
         "content/ctrl-enter-utils.js",
@@ -58,8 +59,14 @@
     "https://github.com/spark*",
     "https://grok.com/*",
     "https://copilot.microsoft.com/*",
-    "https://m365.cloud.microsoft/*",
-    "https://cursor.com/*"
+    "https://m365.cloud.microsoft/*"
+  ],
+  "optional_host_permissions": [
+    "https://cursor.com/agents*",
+    "https://cursor.com/*/agents*",
+    "https://www.genspark.ai/*",
+    "https://duck.ai/*",
+    "https://manus.im/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
