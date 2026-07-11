@@ -7,7 +7,7 @@
   "author": "Kamada Masachika, Xolli",
   "browser_specific_settings": {
     "gecko": {
-      "id": "chatgpt-ctrl-enter-sender@chatgpt-extension.io",
+      "id": "chatgpt-ctrl-enter-sender@xolli",
       "strict_min_version": "114.0"
     }
   },
