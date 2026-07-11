@@ -17,7 +17,7 @@ jobs:
 
       - name: Build XPI
         run: |
-          zip -r "chatgpt-ctrl-enter-sender.xpi" . -x \
+          zip -r "chatgpt-ctrl-enter-sender-${{ github.ref_name }}.xpi" . -x \
             "*.git*" \
             "*.github*" \
             "*.md" \
@@ -33,5 +33,5 @@ jobs:
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: chatgpt-ctrl-enter-sender.xpi
+          files: chatgpt-ctrl-enter-sender-${{ github.ref_name }}.xpi
           generate_release_notes: true

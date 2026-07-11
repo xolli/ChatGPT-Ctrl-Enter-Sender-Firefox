@@ -11,7 +11,7 @@
 ## Browser Support
 
 ### Chromium-based Browsers (e.g. Chrome, Edge, Brave, etc.)
-[Available on Chrome Web Store](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
+Follow to [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender)
 
 ### Firefox
 You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox/releases).
