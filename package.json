@@ -1,7 +1,8 @@
 {
   "name": "chatgpt-ctrl-enter-sender",
-  "version": "1.0.0",
-  "description": "English | [日本語](README_JA.md) | [简体中文](README_CH.md)",
+  "version": "2.3.1",
+  "private": true,
+  "description": "Browser extension that assigns Ctrl+Enter to send messages in ChatGPT and other AI chat sites, so Enter inserts a line break",
   "main": "background.js",
   "scripts": {
     "test": "npm run test:unit && npm run test:integration",
@@ -20,8 +21,8 @@
     "url": "git+https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Masachika Kamada",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/issues"
