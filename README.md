@@ -1,6 +1,7 @@
-# ChatGPT Ctrl+Enter Sender
+# ChatGPT Ctrl+Enter Sender (Firefox Edition)
 
-English | [日本語](README_JA.md) | [简体中文](README_CH.md)
+> **Note:** This is a fork of [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender). 
+> The original repository discontinued Firefox support, so this fork was created to maintain compatibility with Firefox via Manifest V3.
 
 ## Overview
 
@@ -13,9 +14,7 @@ English | [日本語](README_JA.md) | [简体中文](README_CH.md)
 [Available on Chrome Web Store](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
 
 ### Firefox
-[Firefox Add-on page](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/tree/firefox)
-
-> **Note:** The Firefox version is not currently being updated as the maintainer is unable to dedicate time to it. The link above is the last available version.
+You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox/releases).
 
 ## Features
 
