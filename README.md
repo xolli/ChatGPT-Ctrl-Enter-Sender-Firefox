@@ -43,14 +43,6 @@ You can use this extension on the following pages:
 
 <https://user-images.githubusercontent.com/63488322/231231536-0a45f182-eb20-4872-b469-ef0095342011.mp4>
 
-## Usage Tips
-
-We've noticed that when the following extensions are used concurrently, this extension may not function as expected.<br>
-If you encounter any issues, we recommend disabling these extensions temporarily to see if the problem is resolved.
-
-* [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
-
 ## Contributors
 
 <a href="https://github.com/ry0y4n"><img src="https://github.com/ry0y4n.png" width="40"></a>
