@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an enhancement for ChatGPT-Ctrl-Enter-Sender
+about: Suggest an enhancement for ChatGPT-Ctrl-Enter-Sender (Firefox)
 title: 'Feature Request: '
 labels: enhancement
 assignees: ''

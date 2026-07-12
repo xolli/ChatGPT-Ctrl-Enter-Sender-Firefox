@@ -1,7 +1,7 @@
 {
-  "name": "chatgpt-ctrl-enter-sender",
-  "version": "1.0.0",
-  "description": "English | [日本語](README_JA.md) | [简体中文](README_CH.md)",
+  "name": "chatgpt-ctrl-enter-sender-firefox",
+  "version": "2.2.0.1",
+  "description": "Send ChatGPT messages with Ctrl+Enter (Firefox version)",
   "main": "background.js",
   "scripts": {
     "test": "npx playwright test",
@@ -11,21 +11,20 @@
     "test:public": "npx playwright test --grep 'Public Sites'",
     "login": "node tests/login-helper.js",
     "login:all": "node tests/login-helper.js",
-    "login:chrome": "node tests/login-helper.js --use-chrome-profile",
     "copy-session": "node tests/copy-chrome-session.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender.git"
+    "url": "git+https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/issues"
+    "url": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/issues"
   },
-  "homepage": "https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender#readme",
+  "homepage": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2"
   }

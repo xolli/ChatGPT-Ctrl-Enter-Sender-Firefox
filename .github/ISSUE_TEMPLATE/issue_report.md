@@ -1,13 +1,11 @@
 ---
 name: Issue report
-about: Create a report to help us improve ChatGPT-Ctrl-Enter-Sender
+about: Create a report to help us improve ChatGPT-Ctrl-Enter-Sender (Firefox)
 title: ''
 labels: ''
 assignees: ''
 
 ---
-
-> **For Firefox users:** The Firefox version is no longer being updated. Issues related to Firefox may not be addressed. See [README](../../README.md) for details.
 
 > Please provide us with the following information:
 > ---------------------------------------------------------------

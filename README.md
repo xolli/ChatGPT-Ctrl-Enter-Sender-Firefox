@@ -1,6 +1,7 @@
-# ChatGPT Ctrl+Enter Sender
+# ChatGPT Ctrl+Enter Sender (Firefox Edition)
 
-English | [日本語](README_JA.md) | [简体中文](README_CH.md)
+> **Note:** This is a fork of [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender). 
+> The original repository discontinued Firefox support, so this fork was created to maintain compatibility with Firefox via Manifest V3.
 
 ## Overview
 
@@ -10,12 +11,10 @@ English | [日本語](README_JA.md) | [简体中文](README_CH.md)
 ## Browser Support
 
 ### Chromium-based Browsers (e.g. Chrome, Edge, Brave, etc.)
-[Available on Chrome Web Store](https://chrome.google.com/webstore/detail/chatgpt-ctrl%20enter-sender/gbncgdhklmnckojlibfhdadpfbcdbnch)
+Follow to [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender)
 
 ### Firefox
-[Firefox Add-on page](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender/tree/firefox)
-
-> **Note:** The Firefox version is not currently being updated as the maintainer is unable to dedicate time to it. The link above is the last available version.
+You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/releases).
 
 ## Features
 
@@ -43,14 +42,6 @@ You can use this extension on the following pages:
 ## Demo Video
 
 <https://user-images.githubusercontent.com/63488322/231231536-0a45f182-eb20-4872-b469-ef0095342011.mp4>
-
-## Usage Tips
-
-We've noticed that when the following extensions are used concurrently, this extension may not function as expected.<br>
-If you encounter any issues, we recommend disabling these extensions temporarily to see if the problem is resolved.
-
-* [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
-* [TalkBerry](https://chrome.google.com/webstore/detail/talkberry-talk-to-chatgpt/facjhgcdnbfghhbnmfjgkncnbimfdakb)
 
 ## Contributors
 
