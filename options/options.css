@@ -46,22 +46,6 @@ label {
   cursor: not-allowed;
 }
 
-.sponsor-section {
-  margin-top: 20px;
-  padding-top: 12px;
-  border-top: 1px solid #ddd;
-}
-
-.sponsor-link {
-  font-size: 13px;
-  color: #db61a2;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.sponsor-link:hover {
-  opacity: 0.7;
-}
 
 @media (prefers-color-scheme: dark) {
   body {
@@ -83,7 +67,4 @@ label {
     color: #999;
   }
 
-  .sponsor-section {
-    border-top-color: #444;
-  }
 }

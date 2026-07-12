@@ -1,7 +1,7 @@
 {
-  "name": "chatgpt-ctrl-enter-sender",
+  "name": "chatgpt-ctrl-enter-sender-firefox",
   "version": "1.0.0",
-  "description": "Send ChatGPT messages with Ctrl+Enter",
+  "description": "Send ChatGPT messages with Ctrl+Enter (Firefox version)",
   "main": "background.js",
   "scripts": {
     "test": "npx playwright test",
