@@ -14,7 +14,7 @@
 Follow to [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender)
 
 ### Firefox
-You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox/releases).
+You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/releases).
 
 ## Features
 

@@ -15,16 +15,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox.git"
+    "url": "git+https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox/issues"
+    "url": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/issues"
   },
-  "homepage": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-firefox#readme",
+  "homepage": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2"
   }
