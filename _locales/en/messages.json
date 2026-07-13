@@ -1,6 +1,6 @@
 {
     "appName": {
-        "message": "ChatGPT Ctrl+Enter Sender (Firefox Edition)"
+        "message": "ChatGPT Ctrl+Enter Sender (Fork)"
     },
     "appDesc": {
         "message": "Send messages with 'Ctrl+Enter' on ChatGPT and other AI chats. A Firefox-compatible fork of masachika-kamada's original extension."
