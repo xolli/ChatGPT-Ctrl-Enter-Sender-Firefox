@@ -1,8 +1,8 @@
 {
     "appName": {
-        "message": "ChatGPT Ctrl+Enter Sender"
+        "message": "ChatGPT Ctrl+Enter Sender (Fork)"
     },
     "appDesc": {
-        "message": "Use 'Ctrl+Enter' for sending messages in AI chat services like ChatGPT. Prevents accidental sends and allows line breaks with Enter."
+        "message": "Send messages with 'Ctrl+Enter' on ChatGPT and other AI chats. A Firefox-compatible fork of masachika-kamada's original extension."
     }
 }
