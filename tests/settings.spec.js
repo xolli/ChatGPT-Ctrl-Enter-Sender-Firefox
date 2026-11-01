@@ -1,114 +1,114 @@
-const { test } = require("./fixtures");
-const { expect } = require("@playwright/test");
+const { expect } = require("@wdio/globals");
+const {
+  extensionExecute,
+  extensionExecuteAsync,
+  openExtensionPage,
+  setupExtension,
+  startFixtureServer,
+} = require("./wdio-helpers");
 
-async function getServiceWorker(context) {
-  return context.serviceWorkers()[0] || context.waitForEvent("serviceworker");
+setupExtension();
+
+let fixtureServer;
+
+before(async () => {
+  fixtureServer = await startFixtureServer(() => "<!doctype html><title>ChatGPT fixture</title>");
+});
+
+after(async () => {
+  await fixtureServer.close();
+});
+
+async function clearSettings() {
+  await extensionExecuteAsync((done) => browser.storage.sync.clear().then(done));
 }
 
-async function getSiteSettings(serviceWorker) {
-  return serviceWorker.evaluate(async () => {
-    const { siteSettings = {} } = await chrome.storage.sync.get("siteSettings");
-    return siteSettings;
-  });
+async function getSiteSettings() {
+  const stored = await extensionExecuteAsync((done) =>
+    browser.storage.sync.get("siteSettings").then(done)
+  );
+  return stored.siteSettings ?? {};
 }
 
-test("saving one options change preserves a newer setting from another context", async ({ context, extensionId }) => {
-  const serviceWorker = await getServiceWorker(context);
-  await serviceWorker.evaluate(() => chrome.storage.sync.clear());
+describe("Site settings", () => {
+  it("preserves the latest settings when saving an options-page change", async () => {
+    await openExtensionPage("options/options.html");
+    await clearSettings();
 
-  const optionsPage = await context.newPage();
-  await optionsPage.goto(`chrome-extension://${extensionId}/options/options.html`);
+    await browser.waitUntil(() => $('[id="chatgpt.com"]').isExisting(), { timeout: 10000 });
+    const chatGptCheckbox = await $('[id="chatgpt.com"]');
+    const claudeCheckbox = await $('[id="claude.ai"]');
+    await expect(chatGptCheckbox).toBeChecked();
+    await expect(claudeCheckbox).toBeChecked();
 
-  const chatGptCheckbox = optionsPage.locator('[id="chatgpt.com"]');
-  const claudeCheckbox = optionsPage.locator('[id="claude.ai"]');
-  await expect(chatGptCheckbox).toBeChecked();
-  await expect(claudeCheckbox).toBeChecked();
+    await extensionExecuteAsync((done) => browser.storage.sync.set({
+      siteSettings: {
+        "chatgpt.com": false,
+        "www.genspark.ai": false,
+      },
+    }).then(done));
 
-  await serviceWorker.evaluate(() => chrome.storage.sync.set({
-    siteSettings: {
-      "chatgpt.com": false,
-      "www.genspark.ai": false,
-    },
-  }));
+    await claudeCheckbox.click();
+    await $("#saveButton").click();
 
-  await claudeCheckbox.uncheck();
-  await optionsPage.locator("#saveButton").click();
-
-  await expect.poll(() => getSiteSettings(serviceWorker)).toMatchObject({
-    "chatgpt.com": false,
-    "claude.ai": false,
-    "www.genspark.ai": false,
+    await browser.waitUntil(async () => {
+      const settings = await getSiteSettings();
+      return settings["chatgpt.com"] === false &&
+        settings["claude.ai"] === false &&
+        settings["www.genspark.ai"] === false;
+    });
   });
-});
 
-test("concurrent partial updates preserve both site settings", async ({ context, extensionId }) => {
-  const serviceWorker = await getServiceWorker(context);
-  await serviceWorker.evaluate(() => chrome.storage.sync.clear());
+  it("preserves both concurrent partial site-setting updates", async () => {
+    await openExtensionPage("options/options.html");
+    await clearSettings();
 
-  const extensionPage = await context.newPage();
-  await extensionPage.goto(`chrome-extension://${extensionId}/options/options.html`);
+    const responses = await extensionExecuteAsync((done) => Promise.all([
+      browser.runtime.sendMessage({
+        type: "update-site-settings",
+        updates: { "chatgpt.com": false },
+      }),
+      browser.runtime.sendMessage({
+        type: "update-site-settings",
+        updates: { "claude.ai": false },
+      }),
+    ]).then(done));
 
-  const responses = await extensionPage.evaluate(() => Promise.all([
-    chrome.runtime.sendMessage({
+    expect(responses).toEqual([{ ok: true }, { ok: true }]);
+    await browser.waitUntil(async () => {
+      const settings = await getSiteSettings();
+      return settings["chatgpt.com"] === false && settings["claude.ai"] === false;
+    });
+  });
+
+  it("rejects unsupported hosts in site-setting updates", async () => {
+    await openExtensionPage("options/options.html");
+    await clearSettings();
+
+    const response = await extensionExecuteAsync((done) => browser.runtime.sendMessage({
       type: "update-site-settings",
-      updates: { "chatgpt.com": false },
-    }),
-    chrome.runtime.sendMessage({
-      type: "update-site-settings",
-      updates: { "claude.ai": false },
-    }),
-  ]));
+      updates: { "example.com": true },
+    }).then(done));
 
-  expect(responses).toEqual([{ ok: true }, { ok: true }]);
-  await expect.poll(() => getSiteSettings(serviceWorker)).toMatchObject({
-    "chatgpt.com": false,
-    "claude.ai": false,
+    expect(response).toEqual({ ok: false, error: "Invalid site setting update" });
+    expect(await getSiteSettings()).toEqual({});
   });
-});
 
-test("site-setting updates reject unsupported hosts", async ({ context, extensionId }) => {
-  const serviceWorker = await getServiceWorker(context);
-  await serviceWorker.evaluate(() => chrome.storage.sync.clear());
+  it("updates the active site's setting from the popup", async () => {
+    await openExtensionPage("options/options.html");
+    await clearSettings();
 
-  const extensionPage = await context.newPage();
-  await extensionPage.goto(`chrome-extension://${extensionId}/options/options.html`);
-  const response = await extensionPage.evaluate(() => chrome.runtime.sendMessage({
-    type: "update-site-settings",
-    updates: { "example.com": true },
-  }));
+    const siteUrl = fixtureServer.url("chatgpt.com");
+    await browser.newWindow(siteUrl, { type: "tab" });
 
-  expect(response).toEqual({ ok: false, error: "Invalid site setting update" });
-  expect(await getSiteSettings(serviceWorker)).toEqual({});
-});
+    await openExtensionPage("popup/popup.html", { useCurrentPage: true });
 
-test("popup updates the active site's setting", async ({ context, extensionId }) => {
-  const serviceWorker = await getServiceWorker(context);
-  await serviceWorker.evaluate(() => chrome.storage.sync.clear());
-  await context.route("https://chatgpt.com/**", (route) => route.fulfill({
-    contentType: "text/html",
-    body: "<!doctype html><title>ChatGPT fixture</title>",
-  }));
+    const toggle = await $("#isEnabled");
+    await expect($("#toggleSection")).toBeDisplayed();
+    await expect(toggle).toBeChecked();
+    await extensionExecute(() => document.querySelector("#isEnabled").click());
 
-  const sitePage = await context.newPage();
-  await sitePage.goto("https://chatgpt.com/");
-
-  const popupPage = await context.newPage();
-  await popupPage.goto(`chrome-extension://${extensionId}/popup/popup.html`);
-
-  const siteTabId = await serviceWorker.evaluate(async () => {
-    const [tab] = await chrome.tabs.query({ url: "https://chatgpt.com/*" });
-    return tab.id;
+    await browser.waitUntil(async () => (await getSiteSettings())["chatgpt.com"] === false);
+    await expect($("#statusMessage")).not.toBeDisplayed();
   });
-  await serviceWorker.evaluate((tabId) => chrome.tabs.update(tabId, { active: true }), siteTabId);
-  await popupPage.reload();
-
-  const toggle = popupPage.locator("#isEnabled");
-  await expect(toggle).toBeVisible();
-  await expect(toggle).toBeChecked();
-  await toggle.uncheck();
-
-  await expect.poll(() => getSiteSettings(serviceWorker)).toMatchObject({
-    "chatgpt.com": false,
-  });
-  await expect(popupPage.locator("#statusMessage")).toBeHidden();
 });

@@ -4,6 +4,7 @@ extension.zip
 node_modules/
 test-user-data/
 test-results/
+wdio-logs/
 playwright-report/
 tests/screenshots/*.png
 tools/logos/

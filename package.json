@@ -8,12 +8,12 @@
     "bump": "node tools/bump-version.js",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "node --test tools/*.test.js",
-    "test:integration": "playwright test",
-    "test:loading": "playwright test extension-loading",
-    "test:live": "playwright test --config=playwright.live.config.js",
-    "test:sites": "playwright test --config=playwright.live.config.js site-accessibility",
-    "test:behavior": "playwright test --config=playwright.live.config.js ctrl-enter-behavior",
-    "test:public": "playwright test --config=playwright.live.config.js --grep 'Public Sites'",
+    "test:integration": "wdio run wdio.conf.js",
+    "test:loading": "wdio run wdio.conf.js --spec tests/extension-loading.spec.js",
+    "test:live": "wdio run wdio.live.conf.js",
+    "test:sites": "wdio run wdio.live.conf.js --spec tests/live/site-accessibility.spec.js",
+    "test:behavior": "wdio run wdio.live.conf.js --spec tests/live/ctrl-enter-behavior.spec.js",
+    "test:public": "wdio run wdio.live.conf.js --mochaOpts.grep=\"Public Sites\"",
     "login": "node tests/login-helper.js",
     "login:all": "node tests/login-helper.js"
   },
@@ -30,6 +30,14 @@
   },
   "homepage": "https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox#readme",
   "devDependencies": {
-    "@playwright/test": "^1.58.2"
+    "@wdio/cli": "^9.32.0",
+    "@wdio/globals": "^9.31.3",
+    "@wdio/local-runner": "^9.32.0",
+    "@wdio/mocha-framework": "^9.32.0",
+    "@wdio/spec-reporter": "^9.32.0",
+    "adm-zip": "^0.6.1",
+    "expect-webdriverio": "^6.1.0",
+    "geckodriver": "^5.0.0",
+    "webdriverio": "^9.32.0"
   }
 }

@@ -25,8 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Chromium for extension tests
-        run: npx playwright install --with-deps chromium
+      - name: Install Firefox for extension tests
+        uses: browser-actions/setup-firefox@v1
 
       - name: Check supported-site consistency
         run: python3 tools/check_supported_sites.py
@@ -35,7 +35,7 @@ jobs:
         run: python3 -m unittest tools/test_check_site_urls.py
 
       - name: Run unit and integration tests
-        run: xvfb-run --auto-servernum npm test
+        run: npm test
 
   release:
     needs: verify

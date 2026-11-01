@@ -56,6 +56,12 @@ If you encounter any issues, we recommend disabling these extensions temporarily
 
 * [WebChatGPT](https://chrome.google.com/webstore/detail/webchatgpt-chatgpt-with-i/lpfemeioodjbpieminkklglpmhlngfcn)
 
+## Testing
+
+The integration and live-site suites run in Firefox through WebdriverIO. Install Firefox and dependencies with `npm ci`, then run `npm test`. Use `npm run login` to sign in to sites before `npm run test:behavior`; login sessions are saved in `test-user-data/`. Live tests open real sites and may submit messages.
+
+You may need to set `FIREFOX_BINARY` env variable!
+
 ## Sponsors
 
 Thank you to all the GitHub sponsors who have supported this project.
