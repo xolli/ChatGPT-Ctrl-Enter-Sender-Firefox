@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-ctrl-enter-sender-firefox",
-  "version": "2.5.8",
+  "version": "2.5.8.1",
   "private": true,
   "description": "Firefox extension that assigns Ctrl+Enter to send messages in ChatGPT and other AI chat sites",
   "main": "service-worker.js",
