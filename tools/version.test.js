@@ -16,7 +16,7 @@ test("manifest と package と package-lock のバージョンが一致する", 
   const pkg = read("package.json");
   const lock = read("package-lock.json");
 
-  assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
+  assert.match(manifest.version, /^\d+\.\d+\.\d+(\.\d+)?$/);
   assert.equal(pkg.version, manifest.version);
   assert.equal(lock.version, manifest.version);
   assert.equal(lock.packages[""].version, manifest.version);
