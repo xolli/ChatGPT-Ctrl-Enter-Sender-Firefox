@@ -1,29 +1,35 @@
-/**
- * Opt-in site announcement test.
- *
- * Opt-in sites cannot be discovered from the page they are on, so the options
- * page is opened once for sites the user has neither granted nor been shown.
- * It must not open again afterwards.
- */
-const { test } = require("./fixtures");
-const { expect } = require("@playwright/test");
+const { expect } = require("@wdio/globals");
+const { extensionPage, setupExtension } = require("./wdio-helpers");
 
-const OPTIONS_PATH = "options/options.html";
+setupExtension();
 
-test.describe("Opt-in site announcement", () => {
-  test("a first run opens the options page and records the sites", async ({ context, extensionId }) => {
-    const optionsUrl = `chrome-extension://${extensionId}/${OPTIONS_PATH}`;
+describe("Opt-in site announcement", () => {
+  it("opens the options page on first run and records the sites", async () => {
+    const optionsUrl = extensionPage("options/options.html");
 
-    await expect(async () => {
-      expect(context.pages().map((page) => page.url())).toContain(optionsUrl);
-    }).toPass({ timeout: 10000 });
+    await browser.waitUntil(async () => {
+      const handles = await browser.getWindowHandles();
+      for (const handle of handles) {
+        await browser.switchToWindow(handle);
+        if ((await browser.getUrl()) === optionsUrl) return true;
+      }
+      return false;
+    }, { timeout: 10000 });
 
-    expect(context.pages().filter((page) => page.url() === optionsUrl)).toHaveLength(1);
+    const handles = await browser.getWindowHandles();
+    const optionsPages = [];
+    for (const handle of handles) {
+      await browser.switchToWindow(handle);
+      if ((await browser.getUrl()) === optionsUrl) optionsPages.push(handle);
+    }
+    expect(optionsPages).toHaveLength(1);
 
-    const serviceWorker = context.serviceWorkers()[0] || (await context.waitForEvent("serviceworker"));
-    await expect(async () => {
-      const stored = await serviceWorker.evaluate(() => chrome.storage.local.get("announcedOptionalSites"));
-      expect(stored.announcedOptionalSites?.length).toBeGreaterThan(0);
-    }).toPass({ timeout: 10000 });
+    await browser.switchToWindow(optionsPages[0]);
+    await browser.waitUntil(async () => {
+      const stored = await browser.executeAsync((done) => {
+        browser.storage.local.get("announcedOptionalSites").then(done);
+      });
+      return stored.announcedOptionalSites?.length > 0;
+    }, { timeout: 10000 });
   });
 });

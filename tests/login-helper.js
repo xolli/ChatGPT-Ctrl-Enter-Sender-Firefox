@@ -1,16 +1,17 @@
 /**
- * Login Helper — Opens sites so you can log in manually.
- * Session data is saved to test-user-data/ and reused in subsequent test runs.
+ * Opens sites in Firefox so login sessions persist in `test-user-data/`.
  *
  * Usage:
- *   node tests/login-helper.js                        # All auth-required sites
- *   node tests/login-helper.js ChatGPT                # Specific site only
- *   node tests/login-helper.js Claude Gemini           # Multiple sites
+ *   node tests/login-helper.js
+ *   node tests/login-helper.js ChatGPT
+ *   node tests/login-helper.js Claude Gemini
  */
-const { chromium } = require("@playwright/test");
-const path = require("path");
-const fs = require("fs");
-const readline = require("readline");
+const fs = require("node:fs");
+const path = require("node:path");
+const readline = require("node:readline");
+const { remote } = require("webdriverio");
+const geckodriver = require("geckodriver");
+const { waitForPort } = require("./geckodriver");
 
 const AUTH_SITES = [
   { name: "ChatGPT", url: "https://chatgpt.com/" },
@@ -34,74 +35,72 @@ function askUser(question) {
 
 async function main() {
   const args = process.argv.slice(2);
-  const requestedSites = args.length > 0
-    ? AUTH_SITES.filter((s) => args.some((a) => s.name.toLowerCase().includes(a.toLowerCase())))
+  const requestedSites = args.length
+    ? AUTH_SITES.filter((site) => args.some((arg) => site.name.toLowerCase().includes(arg.toLowerCase())))
     : AUTH_SITES;
 
-  if (requestedSites.length === 0) {
+  if (!requestedSites.length) {
     console.log("No matching sites found. Available sites:");
-    AUTH_SITES.forEach((s) => console.log(`  - ${s.name}`));
-    process.exit(1);
+    AUTH_SITES.forEach((site) => console.log(`  - ${site.name}`));
+    process.exitCode = 1;
+    return;
   }
 
-  const extensionPath = path.resolve(__dirname, "..");
   const userDataDir = path.join(__dirname, "..", "test-user-data");
-  if (!fs.existsSync(userDataDir)) {
-    fs.mkdirSync(userDataDir, { recursive: true });
-  }
-  console.log("\n=== Login Helper ===");
-
+  fs.mkdirSync(userDataDir, { recursive: true });
+  console.log("\n=== Firefox Login Helper ===");
   console.log(`Profile: ${userDataDir}`);
-  console.log(`Sites: ${requestedSites.map((s) => s.name).join(", ")}\n`);
+  console.log(`Sites: ${requestedSites.map((site) => site.name).join(", ")}\n`);
 
-  const context = await chromium.launchPersistentContext(userDataDir, {
-    headless: false,
-    args: [
-      `--disable-extensions-except=${extensionPath}`,
-      `--load-extension=${extensionPath}`,
-      "--no-first-run",
-      "--disable-gpu",
-      // Stealth: avoid bot detection / CAPTCHA loops
-      "--disable-blink-features=AutomationControlled",
-    ],
-    ignoreDefaultArgs: ["--enable-automation"],
-    viewport: { width: 1280, height: 800 },
+  const driver = await geckodriver.start({
+    host: "127.0.0.1",
+    port: 4444,
+    spawnOpts: {
+      stdio: "ignore",
+      env: { ...process.env, MOZ_REMOTE_ALLOW_SYSTEM_ACCESS: "1" },
+    },
   });
-
-  // Remove navigator.webdriver flag to bypass CAPTCHA detection
-  context.on("page", async (page) => {
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+  let firefox;
+  try {
+    await waitForPort(4444);
+    firefox = await remote({
+      hostname: "127.0.0.1",
+      port: 4444,
+      capabilities: {
+        browserName: "firefox",
+        acceptInsecureCerts: true,
+        "moz:firefoxOptions": {
+          args: ["-profile", userDataDir],
+          ...(process.env.FIREFOX_BINARY ? { binary: process.env.FIREFOX_BINARY } : {}),
+        },
+      },
     });
-  });
 
-  for (const site of requestedSites) {
-    console.log(`\n--- ${site.name} ---`);
-    console.log(`Opening: ${site.url}`);
-
-    const page = await context.newPage();
-    await page.goto(site.url, { waitUntil: "domcontentloaded", timeout: 30000 });
-
-    console.log(`\n  ➡️  Please log in to ${site.name} in the browser window.`);
-    console.log(`  ➡️  Complete any CAPTCHA / "are you human" checks.`);
-    console.log(`  ➡️  Once logged in, come back here and press Enter to continue.\n`);
-
-    await askUser(`  Press Enter when done with ${site.name}... `);
-
-    console.log(`  ✅ ${site.name} session saved.`);
-    await page.close();
+    for (const site of requestedSites) {
+      console.log(`\n--- ${site.name} ---\nOpening: ${site.url}`);
+      await firefox.url(site.url);
+      console.log(`\n  Please log in to ${site.name} in Firefox.`);
+      console.log('  Complete any CAPTCHA / "are you human" checks.');
+      await askUser(`  Press Enter when done with ${site.name}... `);
+      console.log(`  ${site.name} session saved.`);
+    }
+  } finally {
+    try {
+      if (firefox) await firefox.deleteSession();
+    } finally {
+      if (driver.exitCode === null) {
+        const exited = new Promise((resolve) => driver.once("exit", resolve));
+        driver.kill();
+        await exited;
+      }
+    }
   }
-
-  await context.close();
 
   console.log("\n=== All done! ===");
-  console.log("Sessions have been saved. You can now run tests with:");
-  console.log("  npm test");
-  console.log("  npm run test:behavior");
-  console.log("");
+  console.log("Sessions have been saved. Run `npm run test:behavior` to test them.");
 }
 
-main().catch((err) => {
-  console.error("Error:", err);
-  process.exit(1);
+main().catch((error) => {
+  console.error("Error:", error);
+  process.exitCode = 1;
 });

@@ -1,36 +1,23 @@
-/**
- * Extension loading test — verifies the extension loads correctly
- * and the service worker is registered.
- */
-const { test } = require("./fixtures");
-const { expect } = require("@playwright/test");
+const { expect } = require("@wdio/globals");
+const { openExtensionPage, setupExtension } = require("./wdio-helpers");
 
-test.describe("Extension Loading", () => {
-  test("should load the extension and register service worker", async ({ context, extensionId }) => {
-    expect(extensionId).toBeTruthy();
-    console.log(`  Extension loaded with ID: ${extensionId}`);
+setupExtension();
+
+describe("Extension Loading", () => {
+  it("installs the extension in Firefox", async () => {
+    const url = await browser.execute(() =>
+      document.querySelector('meta[name="ctrl-enter-test-extension-url"]')?.content
+    );
+    expect(url).toMatch(/^moz-extension:\/\//);
   });
 
-  test("should have popup page accessible", async ({ context, extensionId }) => {
-    const popupPage = await context.newPage();
-    await popupPage.goto(`chrome-extension://${extensionId}/popup/popup.html`);
-    await popupPage.waitForLoadState("domcontentloaded");
-
-    // Verify popup has expected content
-    const title = await popupPage.title();
-    console.log(`  Popup page title: ${title}`);
-
-    await popupPage.close();
+  it("opens the popup page", async () => {
+    await openExtensionPage("popup/popup.html");
+    expect(await browser.execute(() => document.title)).not.toBe("");
   });
 
-  test("should have options page accessible", async ({ context, extensionId }) => {
-    const optionsPage = await context.newPage();
-    await optionsPage.goto(`chrome-extension://${extensionId}/options/options.html`);
-    await optionsPage.waitForLoadState("domcontentloaded");
-
-    const title = await optionsPage.title();
-    console.log(`  Options page title: ${title}`);
-
-    await optionsPage.close();
+  it("opens the options page", async () => {
+    await openExtensionPage("options/options.html");
+    expect(await browser.execute(() => document.title)).not.toBe("");
   });
 });

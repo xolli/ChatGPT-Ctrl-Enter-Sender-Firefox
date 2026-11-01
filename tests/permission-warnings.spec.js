@@ -1,28 +1,18 @@
-/**
- * Permission-warning regression test.
- *
- * Adding a required host can require Firefox users to approve an update.
- * Compare the manifest against the last published version so all new hosts
- * remain opt-in. Refresh the baseline after each release.
- */
-const { test, expect } = require("@playwright/test");
-const fs = require("fs");
-const path = require("path");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const BASELINE_MANIFEST = path.join(__dirname, "baseline-manifest.json");
 const CURRENT_MANIFEST = path.join(__dirname, "..", "manifest.json");
 
-test.describe("Permission Update Regression", () => {
-  test("update must not introduce required host permissions", async () => {
-    const baseline = fs.readFileSync(BASELINE_MANIFEST, "utf-8");
-    const current = fs.readFileSync(CURRENT_MANIFEST, "utf-8");
+describe("Permission Update Regression", () => {
+  it("does not introduce required host permissions", () => {
+    const baseline = JSON.parse(fs.readFileSync(BASELINE_MANIFEST, "utf8"));
+    const current = JSON.parse(fs.readFileSync(CURRENT_MANIFEST, "utf8"));
+    const baselineRequiredHosts = new Set(baseline.host_permissions ?? []);
 
-    const baselineRequiredHosts = new Set(JSON.parse(baseline).host_permissions ?? []);
-    for (const host of JSON.parse(current).host_permissions ?? []) {
-      expect(
-        baselineRequiredHosts,
-        `New required host permission was added: "${host}"`
-      ).toContain(host);
+    for (const host of current.host_permissions ?? []) {
+      assert.ok(baselineRequiredHosts.has(host), `New required host permission was added: "${host}"`);
     }
   });
 });
