@@ -13,6 +13,8 @@
 Chromium 版は[こちら](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender)をご覧ください。
 
 ### Firefox
+[Firefox アドオン](https://addons.mozilla.org/en-US/firefox/addon/chatgpt-ctrl-enter-sender-fork/)からインストールできます。
+
 [最新の XPI リリース](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/releases)をダウンロードできます。
 
 ## 機能

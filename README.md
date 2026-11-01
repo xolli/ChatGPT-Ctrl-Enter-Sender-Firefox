@@ -13,6 +13,8 @@
 For Chromium-based browsers, see [masachika-kamada/ChatGPT-Ctrl-Enter-Sender](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender).
 
 ### Firefox
+Install it from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/chatgpt-ctrl-enter-sender-fork/).
+
 You can download the latest `.xpi` release for Firefox from the [Releases page](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/releases).
 
 ## Features

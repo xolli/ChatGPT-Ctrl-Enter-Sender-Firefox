@@ -13,6 +13,8 @@
 Chromium 版本请参阅[此处](https://github.com/masachika-kamada/ChatGPT-Ctrl-Enter-Sender)。
 
 ### Firefox
+[从 Firefox 附加组件商店](https://addons.mozilla.org/en-US/firefox/addon/chatgpt-ctrl-enter-sender-fork/)安装。
+
 可从[最新的 XPI 发布页](https://github.com/xolli/ChatGPT-Ctrl-Enter-Sender-Firefox/releases)下载。
 
 ## 功能

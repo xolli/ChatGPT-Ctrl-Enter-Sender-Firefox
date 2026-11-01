@@ -24,8 +24,8 @@ These sites may be removed if they become unmaintainable:
 ## How New Sites Are Shipped
 
 Adding a required host permission can require users to approve an extension
-update. `tests/permission-warnings.spec.js` therefore rejects any required host
-absent from the published Firefox baseline.
+update. Keep new host patterns opt-in to avoid expanding required permissions
+for existing users.
 
 - **Required** only when the host already exists in the published manifest.
 - **Opt-in** for every new host pattern, including a replacement hostname for
@@ -69,11 +69,8 @@ Bug reports for Tier 1 and Tier 2 sites are always welcome. Please use the issue
 
 ## Testing
 
-Run `npm test` before opening a pull request. This command runs deterministic
-unit and extension integration suites and does not connect to supported AI sites.
-The integration suite loads a test-only Chromium-compatible manifest because
-Playwright supports unpacked extension tests in Chromium; the shipped manifest
-and release package remain Firefox-specific.
+Run `npm test` before opening a pull request. It runs unit tests and Firefox
+integration tests through WebdriverIO
 
 Tests under `tests/live/` connect to real sites and are intentionally excluded
 from the default suite. Run them only from a dedicated test environment:
@@ -109,17 +106,17 @@ python tools/check_site_urls.py --output site-url-report.md
 ## Releasing
 
 The version lives in `manifest.json`, `package.json` and `package-lock.json`, and
-the release workflow refuses to publish when the tag and the manifest disagree.
-Bump all three with one command rather than editing them by hand:
+the release workflow refuses to create a GitHub release when the tag and
+manifest disagree. Bump all three with one command rather than editing them by
+hand:
 
 ```shell
 npm run bump X.Y.Z
 ```
 
-Commit that on `master`; a release does not need its own branch. Then:
+Commit the version change on `master`; a release does not need its own branch
+Then:
 
 1. Merge changes into `master`
-2. Tag `master` with `vX.Y.Z`, which builds the Firefox XPI and creates the GitHub release
-3. Submit the XPI to Mozilla Add-ons
-4. Copy the released `manifest.json` over `tests/baseline-manifest.json`, so the
-   permission-warning test keeps comparing against what users have installed
+2. Tag `master` with `vX.Y.Z`. The release workflow verifies the tag, runs the
+   test suite, builds the Firefox XPI, and creates a GitHub release

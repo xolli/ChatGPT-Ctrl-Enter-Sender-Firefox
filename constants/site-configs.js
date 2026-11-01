@@ -5,7 +5,6 @@
  *   - Required sites: listed in manifest.json content_scripts / host_permissions.
  *     Limited to hosts already in the published manifest: adding a required
  *     host may prompt users to approve the extension update.
- *     tests/permission-warnings.spec.js guards this.
  *   - Optional sites (`optional: true`): covered by optional_host_permissions.
  *     The user grants access per-site from the popup; content scripts are
  *     registered dynamically by shared/site-sync.js.
