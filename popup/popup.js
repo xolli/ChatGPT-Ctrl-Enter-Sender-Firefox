@@ -1,6 +1,6 @@
-import { SITE_CONFIGS, extractHostname } from "../constants/site-configs.js";
-import { syncSiteRegistrations, syncOptionalContentScripts, injectIntoOpenTabs } from "../shared/site-sync.js";
-import { localizePage } from "../shared/i18n.js";
+import {extractHostname, SITE_CONFIGS} from "../constants/site-configs.js";
+import {injectIntoOpenTabs, syncOptionalContentScripts, syncSiteRegistrations} from "../shared/site-sync.js";
+import {localizePage} from "../shared/i18n.js";
 
 localizePage();
 
@@ -58,9 +58,7 @@ function showToggle() {
 
   chrome.storage.sync.get("siteSettings", (data) => {
     const siteSettings = data.siteSettings || {};
-    const isEnabled = siteSettings[currentConfig.hostname] ?? true;
-    toggleButton.checked = isEnabled;
-    updateIcon(isEnabled, currentTab.id);
+    toggleButton.checked = siteSettings[currentConfig.hostname] ?? true;
   });
 }
 
@@ -77,8 +75,6 @@ toggleButton.addEventListener("change", () => {
     if (failed) {
       toggleButton.checked = !isEnabled;
       showStatus("Could not save this setting. Please try again.");
-    } else {
-      updateIcon(isEnabled, currentTab.id);
     }
     toggleButton.disabled = false;
   });
@@ -94,11 +90,6 @@ grantButton.addEventListener("click", () => {
       .then(showToggle, () => showStatus("Could not enable this site. Please try again."));
   });
 });
-
-function updateIcon(enabled, tabId) {
-  chrome.action.setIcon({ tabId, path: enabled ? "icon/enabled.png" : "icon/disabled.png" });
-  chrome.action.enable(tabId);
-}
 
 function showStatus(message) {
   statusMessage.textContent = message;

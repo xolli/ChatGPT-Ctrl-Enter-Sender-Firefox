@@ -12,11 +12,16 @@ function toDataUrl(source) {
 async function loadServiceWorker(deps) {
   const listeners = {};
   const events = [];
+  const iconCalls = [];
+  let siteSettings = {};
   globalThis.__serviceWorkerDeps = deps;
   globalThis.chrome = {
     action: {
       enable: async () => events.push("enable"),
-      setIcon: async () => events.push("icon"),
+      setIcon: async (details) => {
+        events.push("icon");
+        iconCalls.push(details);
+      },
     },
     permissions: {
       onAdded: { addListener: (listener) => { listeners.onAdded = listener; } },
@@ -30,8 +35,11 @@ async function loadServiceWorker(deps) {
     },
     storage: {
       sync: {
-        get: async () => ({}),
-        set: async () => {},
+        get: async () => ({ siteSettings }),
+        set: async ({ siteSettings: updates }) => {
+          siteSettings = updates;
+          events.push("storage");
+        },
       },
     },
     tabs: {
@@ -61,7 +69,7 @@ async function loadServiceWorker(deps) {
     .concat(`\n// ${Math.random()}\n`);
 
   await import(toDataUrl(source));
-  return { events, listeners };
+  return { events, iconCalls, listeners };
 }
 
 function flushPromises() {
@@ -93,4 +101,28 @@ test("newly granted site scripts are synchronized before existing tabs are injec
   await flushPromises();
   await flushPromises();
   assert.deepEqual(events, ["scripts", "inject", "icon", "enable"]);
+});
+
+test("site setting updates refresh icons through the service worker", async () => {
+  const deps = {
+    syncOptionalContentScripts: async () => {},
+    injectIntoOpenTabs: async () => {},
+    announceNewSites: async () => {},
+  };
+  const { events, iconCalls, listeners } = await loadServiceWorker(deps);
+  let response;
+
+  const keepChannelOpen = listeners.onMessage(
+    { type: "update-site-settings", updates: { "duck.ai": false } },
+    { id: "test-extension" },
+    (value) => { response = value; }
+  );
+  assert.equal(keepChannelOpen, true);
+
+  await flushPromises();
+  await flushPromises();
+  await flushPromises();
+  assert.deepEqual(response, { ok: true });
+  assert.deepEqual(events, ["storage", "icon", "enable"]);
+  assert.deepEqual(iconCalls, [{ tabId: 7, path: "icon/disabled.png" }]);
 });

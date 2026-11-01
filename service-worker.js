@@ -69,7 +69,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     updateSiteSettings(updates).then(
-      () => sendResponse({ ok: true }),
+      async () => {
+        const configs = SITE_CONFIGS.filter((config) => Object.hasOwn(updates, config.hostname));
+        try {
+          await refreshActionIcons(configs);
+        } catch (error) {
+          console.error("Could not refresh toolbar icons after updating site settings:", error);
+        }
+        sendResponse({ ok: true });
+      },
       (error) => sendResponse({ ok: false, error: String(error) })
     );
     return true;
@@ -108,7 +116,11 @@ async function refreshActionIcons(configs) {
       continue;
     }
     for (const tab of tabs) {
-      await applyActionIcon(tab.id, tab.url);
+      try {
+        await applyActionIcon(tab.id, tab.url);
+      } catch (error) {
+        console.error(`Could not update the toolbar icon for ${config.hostname}:`, error);
+      }
     }
   }
 }
